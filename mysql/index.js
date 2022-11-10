@@ -5,12 +5,12 @@ const app = express();
 const db=mysql.createConnection({
     host:"localhost",
     user:"root",
-    password:"root",
+    password:"rahul",
     database:"test"
 });
 db.connect((err)=>{
-    // if(err) throw err;
-    console.log("connected");
+    if(!err) return console.log("connected");
+    return console.log(err);
 });
 app.get('/',(req,res)=>{
     res.send("i am from backend");
