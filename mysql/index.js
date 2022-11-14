@@ -28,7 +28,7 @@ app.get("/books",(req,res)=>{
     });
 });
 
-//fetch book with id==
+//fetch book with id
 app.get("/books/book/:id",(req,res)=>{
     const bookId=req.params.id;
     const q="SELECT * FROM books WHERE id = ?";
@@ -82,14 +82,14 @@ app.put('/books/book/:id',(req,res)=>{
 //delete the book
 app.delete('/books/:id',(req,res)=>{
     const bookId=req.params.id;
-    const q="DELETE FROM books WHERE id = ?"
+    const q="DELETE FROM books WHERE id = ?";
 
     db.query(q,[bookId], (err,data)=>{
         if(err) return res.status(400).json("something is wrong"+err);
         return res.status(200).json(" => book  deleted from the table"); 
     })
-})
+});
 const PORT=8000;
 app.listen(PORT, () => {
   console.log(`Server listening on PORT http://localhost:${PORT}/`);
-})
+});
