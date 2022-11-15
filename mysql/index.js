@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const app = express();
 
+//alter user 'root'@'localhost'identified with mysql_native_password by 'rahul';
 const db=mysql.createConnection({
     host:"localhost",
     user:"root",
@@ -39,11 +40,12 @@ app.get("/books/book/:id",(req,res)=>{
 })
 // for inserting new books data
 app.post("/books",(req,res)=>{
-    const q="INSERT INTO books(`title`,`desc`,`cover`) VALUES (?)"
+    const q="INSERT INTO books(`title`,`desc`,`cover`,`authorId`) VALUES (?)"
     const values=[
         req.body.title,
         req.body.desc,
-       req.body.cover
+       req.body.cover,
+       req.body.authorId
     ]
 
     db.query(q,[values], (err,data)=>{
@@ -89,6 +91,55 @@ app.delete('/books/:id',(req,res)=>{
         return res.status(200).json(" => book  deleted from the table"); 
     })
 });
+
+// author table manipulation
+
+// for inserting new author data
+app.post("/author",(req,res)=>{
+    const q="INSERT INTO author(`authorName`,`gender`,`country`) VALUES (?)"
+    const values=[
+        req.body.authorName,
+        req.body.gender,
+       req.body.country
+    ]
+
+    db.query(q,[values], (err,data)=>{
+        if(err) return res.status(400).json("something is wrong"+err);
+        return res.status(200).json("author data inserted into the table"); 
+    })
+});
+
+//delete the book
+app.delete('/author/:id',(req,res)=>{
+    const bookId=req.params.id;
+    const q="DELETE FROM author WHERE id = ?";
+
+    db.query(q,[bookId], (err,data)=>{
+        if(err) return res.status(400).json("something is wrong"+err);
+        return res.status(200).json(" => author  deleted from the table"); 
+    })
+});
+
+//for fetching all the author data
+app.get("/author",(req,res)=>{
+    const q="SELECT * FROM author";
+     db.query(q,(err,data)=>{
+        if(err) return res.status(400).json("something is wrong"+err);
+        return res.status(200).json(data);
+        // console.log(data);
+    });
+});
+
+//for fetching join data from author and books
+app.get("/join",(req,res)=>{
+    const q="SELECT * FROM author JOIN books  on books.authorId=author.id";
+     db.query(q,(err,data)=>{
+        if(err) return res.status(400).json("something is wrong"+err);
+        return res.status(200).json(data);
+        // console.log(data);
+    });
+});
+
 const PORT=8000;
 app.listen(PORT, () => {
   console.log(`Server listening on PORT http://localhost:${PORT}/`);
