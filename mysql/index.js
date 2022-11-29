@@ -140,6 +140,15 @@ app.get("/join",(req,res)=>{
     });
 });
 
+app.get("/innerjoin",(req,res)=>{
+    const q="SELECT `title` ,`desc` FROM books inner JOIN author ON books.authorId = author.id ";
+     db.query(q,(err,data)=>{
+        if(err) return res.status(400).json("something is wrong"+err);
+        return res.status(200).json(data);
+        // console.log(data);
+    });
+});
+
 const PORT=8000;
 app.listen(PORT, () => {
   console.log(`Server listening on PORT http://localhost:${PORT}/`);
