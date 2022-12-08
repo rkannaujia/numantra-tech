@@ -1,0 +1,84 @@
+.container {
+    height: 100vh;
+    background-color: rgb(194, 192, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .card {
+        width: 40%;
+        display: flex;
+        background-color: white;
+        border-radius: 10px;
+        min-height: 400px;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+        .calc{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .upper{
+            flex: 1;
+            width: 90%;
+            margin: 10px;
+        }
+        .lower{
+             flex: 3;  
+             width: 100%;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+        }
+        .number{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .operator{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btns{
+            flex: 1;
+            display: flex;
+             align-items: center;
+             justify-content: center;
+            //  flex-direction: column;
+        }
+        #answer{
+            background-color: #e2e2e2;
+            padding: 10px;
+            margin-right: 0px;
+            width: 90%;
+            height: 45px;
+            font-size: 35px;
+            text-align: right;
+            border: 3px solid #3333;
+        }
+        .button{
+            font-size: 30px;
+            border-radius: 10px;
+            background-color:black;
+            color: #e2e2e2;
+            padding: 10px 15px;
+            }
+
+        .clear{
+            background-color: red;
+            color: #e2e2e2;
+            padding: 10px 10px;
+        }
+        .equal{
+            background-color: green;
+            color: #e2e2e2;
+            padding: 10px 30px;
+        }
+    }
+}

@@ -8,10 +8,16 @@ const db = mysql.createConnection({
     password: "rahul",
     database: "employee"
 });
+// const initialTime = new Date().getMilliseconds();
+// console.log(`Initial Time = ${initialTime} ms`);
 db.connect((err) => {
     if (!err) return console.log("connected to mysql>employee database");
     return console.log(err);
 });
+
+// const timeAfterdbConnection = new Date().getMilliseconds()-initialTime;
+// console.log(` Time After dbConnection = ${timeAfterdbConnection} ms`);
+
 app.use(express.json());
 
 // for inserting new employee data
@@ -44,6 +50,10 @@ app.post("/empdetails", (req, res) => {
 
 //------------------ using for loop
 app.get("/alldetails", (req, res) => {
+    const initialTime = new Date().getMilliseconds();
+
+    const inApi_initialTime = new Date().getMilliseconds()-initialTime;
+    console.log(`Inside Api Initial Time = ${inApi_initialTime} ms`);
     db.query(`SELECT empcode FROM employee`, (err, data) => {
         let output = []
         if (err) return res.status(400).json("something is wrong" + err);
@@ -52,7 +62,8 @@ app.get("/alldetails", (req, res) => {
                 return item.empcode;
             })
             console.log(result);
-
+            const startLoop = new Date().getMilliseconds()-initialTime;
+            console.log(`start loop Time = ${startLoop} ms`);
             for (let i = 0; i < result.length; i++) {
                 db.query(`select * from empdetails where id="${result[i]}"`, (err, data) => {
                     if (err) {
@@ -63,8 +74,11 @@ app.get("/alldetails", (req, res) => {
                         // console.log(`${i}========= ${output}`);
                         // console.log(`${i} === ${result.length - 1}`);
                         if (i === result.length - 1) {
-                            console.log("output ", output);
+                            // console.log("output ", output);
                             res.status(200).json(output);
+                            //time calculate
+                            const endLoop = new Date().getMilliseconds()-initialTime;
+                            console.log(`end loop Time = ${endLoop} ms`);
                         }
                     }
                 })
@@ -113,33 +127,47 @@ app.get("/searchWithPromise", (req, res) => {
 function returnDBData(empCode) {
    return new Promise((resolve, reject) => {
         db.query(`SELECT * FROM empdetails WHERE empcode="${empCode}"`, (err, data) => {
-            if (err) {
-                reject(err)
-            } else {
-         resolve(data)
-               }
+            if (err) { reject(err)} else { resolve(data)}
         })//query close
     }) //promise colse
 }
 //  console.log(returnDBData(4));
 
 app.get("/searchWithPromise", (req, res) => {
+    const initialTime = new Date().getMilliseconds();
+
+    const inApi_initialTime = new Date().getMilliseconds()-initialTime;
+    console.log(`Inside Api Initial Time = ${inApi_initialTime} ms`);
     db.query(`SELECT empcode FROM employee`, (err, data) => {
-        let promises = []
         if (err) return res.status(400).json("something is wrong" + err);
         else {
+            const queryTime= new Date().getMilliseconds()-initialTime;
+            console.log(`Query time = ${queryTime} ms`);
             const promises = data.map(item => {
                 let id = item.empcode;
                 // console.log(id)
                 return returnDBData(id);
+                
             })
+           
             // console.log(promises);
             Promise.allSettled([...promises]).then((promise)=>{
                 res.status(200).json(promise);
+                const afterResolvingPromise= new Date().getMilliseconds()-initialTime;
+               console.log(`After Resolving the promises = ${afterResolvingPromise} ms`);
              }).catch(err=>{
                 res.json(err)
-            })
+            });
+           
+             /** 
+            Promise.all([...promises]).then((promise)=>{
+                res.status(200).json(promise);
+             }).catch(err=>{
+                res.json(err)
+            }) */
         }
+        const endTime=new Date().getMilliseconds()-initialTime;
+            console.log(`endTime = ${endTime} ms`);
 
     })
 })
