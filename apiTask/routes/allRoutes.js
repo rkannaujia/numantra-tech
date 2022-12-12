@@ -5,6 +5,7 @@ import { getKeys } from '../controller/getKeys.js';
 import { removeDuplicate } from '../controller/removeDuplicate.js';
 import { getError, getHighestValue, uploadFile } from '../controller/othres.js';
 import { upload } from '../services/upload.js';
+import { findDuplicate } from '../controller/findDuplicate.js';
 
 
 
@@ -15,7 +16,8 @@ router.get('/getData',getData);
 router.get('/getKeys',getKeys);
 router.get('/removeDuplicate',removeDuplicate);
 router.get('/others/getHighestValue',getHighestValue);
-router.get('/others/getError',getError)
+router.get('/others/getError',getError);
 router.post('/others/upload',upload,uploadFile)
+router.get('/findDuplicate',findDuplicate);
 
 export default router

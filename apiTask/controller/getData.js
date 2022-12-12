@@ -8,9 +8,8 @@ import axios from "axios";
             return post.userId==3;
         })
         // console.log(filteredData);
-        return res.status(200).json(filteredData)
+        return res.status(200).json(filteredData);
     } catch (error) {
-       res.status(400).json(error.message) 
+       res.status(400).json(error.message);
     }
-
 }

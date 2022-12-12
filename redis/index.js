@@ -18,6 +18,7 @@ const app = express();
 app.use(express.json());
 
 //storing data using key and value 
+/** 
 app.post("/setData", async (req, res) => {
  console.log(req.body);
  const { key, value } = req.body;
@@ -32,7 +33,7 @@ app.get("/getData", async (req, res) => {
  const data = await client.get(key);
  res.json(data);
 });
-
+*/
 //making request to third party api and implemented caching.
 app.get("/getPost/:id", async (req, res) => {
  const { id } = req.params;
@@ -48,6 +49,19 @@ app.get("/getPost/:id", async (req, res) => {
 
  return res.json(response.data);
 });
+app.get("/test", async (req, res) => {
+ try {
+   const reply = await client.get("countries");
+  if (reply) {
+   return res.json(JSON.parse(reply));
+  }
+   const response = await axios.get("https://restcountries.com/v3.1/all");
+  await client.set("countries", JSON.stringify(response.data)); 
+  return res.json(response.data);
+   } catch (err) {
+   res.send(err.message);
+   }
+  });
 
 const PORT=8800;
 
